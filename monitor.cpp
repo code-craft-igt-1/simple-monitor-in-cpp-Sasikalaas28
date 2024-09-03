@@ -14,22 +14,17 @@ void displayWarning() {
   }
 }
 /// @brief to check if the vitals are ok
-/// @param temperature 
-/// @param pulseRate 
-/// @param spo2 
+/// @param temperature
+/// @param pulseRate
+/// @param spo2
 /// @return 1 if vitals are ok, 0 otherwise
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-  if (!checkTemperature(temperature)) {
-    return 0;
-  } else if (!checkPulseRate(pulseRate)) {
-    return 0;
-  } else if (!checkSpo2(spo2)) {
-    return 0;
-  }
-  return 1;
+  int result = 1;
+  (!checkTemperature(temperature)) ? result = 0 : ((!checkPulseRate(pulseRate)) ? result = 0 : ((!checkSpo2(spo2)) ? result = 0 : (result = 1)));
+  return result;
 }
 /// @brief to check if the temperature is in range
-/// @param temperature 
+/// @param temperature
 /// @return true if temperature is in range, false otherwise
 bool checkTemperature(float temperature) {
   if (temperature > 102 || temperature < 95) {
