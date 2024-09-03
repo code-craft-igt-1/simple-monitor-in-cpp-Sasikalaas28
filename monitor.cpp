@@ -19,7 +19,7 @@ void displayWarning() {
 /// @param spo2
 /// @return 1 if vitals are ok, 0 otherwise
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-  if(checkVitals(temperature, pulseRate, spo2)) {
+  if (checkVitals(temperature, pulseRate, spo2)) {
     return 1;
   }
   return 0;
