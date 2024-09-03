@@ -19,12 +19,14 @@ void displayWarning() {
 /// @param spo2
 /// @return 1 if vitals are ok, 0 otherwise
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-  int result = -1;
-  bool temp = checkTemperature(temperature);
-  bool pulse = checkPulseRate(pulseRate);
-  bool spo = checkSpo2(spo2);
-  (temp && pulse && spo) ? result = 1 : result = 0;
-  return result;
+  if(checkVitals(temperature, pulseRate, spo2)) {
+    return 1;
+  }
+  return 0;
+}
+
+bool checkVitals(float temperature, float pulseRate, float spo2) {
+  return (checkTemperature(temperature) && checkPulseRate(pulseRate) && checkSpo2(spo2));
 }
 /// @brief to check if the temperature is in range
 /// @param temperature
