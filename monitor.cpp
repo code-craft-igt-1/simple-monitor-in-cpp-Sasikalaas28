@@ -46,7 +46,7 @@ bool isTemperatureOk(float temperature) {
  * @return True if the pulse rate is within the acceptable range, false otherwise.
  */
 bool isPulseRateOk(float pulseRate) {
-  if (isNotInRange(pulseRate,60,100)) {
+  if (isNotInRange(pulseRate, 60, 100)) {
     cout << "Pulse Rate is out of range!\n";
     buffering();
     return false;
@@ -59,8 +59,8 @@ bool isPulseRateOk(float pulseRate) {
  * @param spo2 The spo2 value to be checked.
  * @return True if the spo2 is within the acceptable range, false otherwise.
  */
-bool isSpo2Ok(float spo2){
-  if (isNotInRange(spo2,90,0)) {
+bool isSpo2Ok(float spo2) {
+  if (isNotInRange(spo2, 90, 0)) {
     cout << "Oxygen Saturation out of range!\n";
     buffering();
     return false;
