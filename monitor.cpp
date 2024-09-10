@@ -1,8 +1,8 @@
 #include "./monitor.h"
-#include <locale>
-#include <codecvt>
 #include <windows.h>
 #include <assert.h>
+#include <locale>
+#include <codecvt>
 #include <thread>
 #include <chrono>
 #include <iostream>
