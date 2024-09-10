@@ -13,13 +13,13 @@
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 enum Language {
     TAMIL,
-    GREEK 
+    GREEK
 //  DUTCH supported in future
 };
 std::vector<std::wstring> Tamil;
 std::vector<std::wstring> Greek;
-std::map<Language,std::vector<std::wstring>> warningMessages;
-std::map<std::string,int> MessageIndex;
+std::map<Language, std::vector<std::wstring>> warningMessages;
+std::map<std::string, int> MessageIndex;
 void initializeWarnigMessages() {
     Tamil.push_back(L"தாழ்வெப்பநிலை");
     Tamil.push_back(L"ஹைப்போ அருகில்");
@@ -33,7 +33,7 @@ void initializeWarnigMessages() {
     Greek.push_back(L"κοντά σε υπερ");
     Greek.push_back(L"υπερθερμία");
     warningMessages.insert({ Language::GREEK, Greek });
-   MessageIndex.insert({ "HYPO_THERMIA", 0 }); 
+    MessageIndex.insert({ "HYPO_THERMIA", 0 }); 
     MessageIndex.insert({ "NEAR_HYPO", 1 });
     MessageIndex.insert({ "NORMAL", 2 });
     MessageIndex.insert({ "NEAR_HYPER", 3 });
@@ -66,7 +66,7 @@ bool isItInRange(float value, float lower, float upper) {
 void displayMessage(int MsgInd, Language lang) {
     // Set console output to UTF-8
     SetConsoleOutputCP(CP_UTF8);
-    if(MsgInd > 4) {
+    if (MsgInd > 4) {
         MsgInd = 4;
     }
     // Print the wide string
@@ -75,9 +75,10 @@ void displayMessage(int MsgInd, Language lang) {
 }
 void displayTemperatureWarning(float temperature, Language lang) {
      int MsgInd = 0;
-     std::map<float,float> temperatureRange = { {0, 95}, {95, 96.53}, {96.54, 100.47}, {100.48, 102}, {102, 102} };
+     std::map<float, float> temperatureRange = { {0, 95}, {95, 96.53},
+                                                {96.54, 100.47}, {100.48, 102}, {102, 102} };
       for (auto itr = temperatureRange.begin(); itr != temperatureRange.end(); ++itr) {
-          if(isItInRange(temperature, itr->first, itr->second)) {
+          if (isItInRange(temperature, itr->first, itr->second)) {
               break;
           }
           MsgInd++;
@@ -99,8 +100,7 @@ bool isTemperatureOk(float temperature) {
   if (isNotInRange(temperature, 95, 102)) {
     cout << "Temperature is critical!\n";
     buffering();
-  }
-  else
+  }else
       isTempOk = true;
   displayTemperatureWarning(temperature, Language::TAMIL);
   displayTemperatureWarning(temperature, Language::GREEK);
