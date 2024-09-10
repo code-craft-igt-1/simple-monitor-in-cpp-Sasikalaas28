@@ -65,8 +65,8 @@ bool isItInRange(float value, float lower, float upper) {
 }
 
 void displayMessage(int MsgInd, Language lang) {
-    // Set console output to UTF-8
-    // SetConsoleOutputCP(CP_UTF8);
+  // Set console output to UTF-8
+  // SetConsoleOutputCP(CP_UTF8);
     system("chcp 65001");
     if (MsgInd > 4) {
         MsgInd = 4;
