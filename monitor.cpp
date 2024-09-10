@@ -1,5 +1,4 @@
 #include "./monitor.h"
-#include <windows.h>
 #include <assert.h>
 #include <locale>
 #include <codecvt>
@@ -9,6 +8,8 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <stdlib.h>
+#include <stdio.h>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 enum Language {
@@ -65,7 +66,8 @@ bool isItInRange(float value, float lower, float upper) {
 
 void displayMessage(int MsgInd, Language lang) {
     // Set console output to UTF-8
-    SetConsoleOutputCP(CP_UTF8);
+   // SetConsoleOutputCP(CP_UTF8);
+    system("chcp 65001");
     if (MsgInd > 4) {
         MsgInd = 4;
     }
