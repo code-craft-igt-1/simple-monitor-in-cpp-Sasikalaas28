@@ -1,5 +1,6 @@
 #pragma once
 
+void initializeWarnigMessages();
 bool isTemperatureOk(float temperature);
 bool isPulseRateOk(float pulseRate);
 bool isSpo2Ok(float spo2);

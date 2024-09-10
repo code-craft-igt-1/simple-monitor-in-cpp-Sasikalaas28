@@ -57,3 +57,31 @@ TEST(Monitor, NotOkWhenTemperatureIsAboveRange) {
   ASSERT_FALSE(isVitalsOk(100, 100, 85));
   ASSERT_FALSE(isVitalsOk(103, 90, 100));
 }
+
+TEST(Monitor, TemperatureIsHypoThermia) {
+  ASSERT_FALSE(isVitalsOk(94, 100, 85));
+  ASSERT_FALSE(isVitalsOk(80, 90, 100));
+  ASSERT_FALSE(isVitalsOk(94.9, 90, 100));
+}
+
+TEST(Monitor, TemperatureIsNearHypo) {
+  ASSERT_FALSE(isVitalsOk(95.5, 100, 85));
+  ASSERT_TRUE(isVitalsOk(95.52, 90, 100));
+  ASSERT_TRUE(isVitalsOk(96.53, 90, 100));
+}
+
+TEST(Monitor, TemperatureIsNormal) {
+  ASSERT_FALSE(isVitalsOk(96.54, 100, 85));
+  ASSERT_TRUE(isVitalsOk(99.52, 90, 100));
+  ASSERT_TRUE(isVitalsOk(100.47, 90, 100));
+}
+
+TEST(Monitor, TemperatureIsNearHyper) {
+  ASSERT_FALSE(isVitalsOk(100.48, 100, 85));
+  ASSERT_TRUE(isVitalsOk(101.9, 90, 100));
+  ASSERT_TRUE(isVitalsOk(102, 90, 100));
+}
+
+TEST(Monitor, TemperatureIsHyperThermia) {
+  ASSERT_FALSE(isVitalsOk(102.1, 90, 100));
+}
