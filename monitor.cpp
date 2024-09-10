@@ -62,6 +62,17 @@ bool isVitalsOk(float temperature, float pulseRate, float spo2) {
 bool isItInRange(float value, float lower, float upper) {
      return (value >= lower && value <= upper);
 }
+
+void displayMessage(int MsgInd, Language lang) {
+    // Set console output to UTF-8
+    SetConsoleOutputCP(CP_UTF8);
+    if(MsgInd > 4) {
+        MsgInd = 4;
+    }
+    // Print the wide string
+    std::wcout.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+    std::wcout << warningMessages[lang][MsgInd] << std::endl;
+}
 void displayTemperatureWarning(float temperature, Language lang) {
      int MsgInd = 0;
      std::map<float,float> temperatureRange = { {0, 95}, {95, 96.53}, {96.54, 100.47}, {100.48, 102}, {102, 102} };
@@ -71,15 +82,7 @@ void displayTemperatureWarning(float temperature, Language lang) {
           }
           MsgInd++;
       }
-      // Set console output to UTF-8
-      SetConsoleOutputCP(CP_UTF8);
-
-      // Print the wide string
-    std::wcout.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
-    if(MsgInd > 4)
-      MsgInd = 4;
-    std::wcout << warningMessages[lang][MsgInd] << std::endl;
-    //  cout << warningMessages[lang][MsgInd] <<"\n";
+      displayMessage(MsgInd, lang);
 }
 /// @brief to check if the value is not in range
 bool isNotInRange(float value, float lower, float upper) {
