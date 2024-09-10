@@ -33,7 +33,7 @@ void initializeWarnigMessages() {
     Greek.push_back(L"κοντά σε υπερ");
     Greek.push_back(L"υπερθερμία");
     warningMessages.insert({ Language::GREEK, Greek });
-    MessageIndex.insert({ "HYPO_THERMIA", 0 }); 
+    MessageIndex.insert({ "HYPO_THERMIA", 0 });
     MessageIndex.insert({ "NEAR_HYPO", 1 });
     MessageIndex.insert({ "NORMAL", 2 });
     MessageIndex.insert({ "NEAR_HYPER", 3 });
@@ -100,8 +100,9 @@ bool isTemperatureOk(float temperature) {
   if (isNotInRange(temperature, 95, 102)) {
     cout << "Temperature is critical!\n";
     buffering();
-  }else
+  } else {
       isTempOk = true;
+  }
   displayTemperatureWarning(temperature, Language::TAMIL);
   displayTemperatureWarning(temperature, Language::GREEK);
   return isTempOk;
