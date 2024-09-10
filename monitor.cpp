@@ -5,10 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <Windows.h>
 #include <string>
 #include <locale>
 #include <codecvt>
+#include <windows.h>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 enum Language {
