@@ -1,4 +1,7 @@
 #include "./monitor.h"
+#include <locale>
+#include <codecvt>
+#include <windows.h>
 #include <assert.h>
 #include <thread>
 #include <chrono>
@@ -6,9 +9,6 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <locale>
-#include <codecvt>
-#include <windows.h>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 enum Language {
