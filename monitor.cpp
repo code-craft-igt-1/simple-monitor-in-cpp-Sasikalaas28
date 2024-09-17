@@ -74,8 +74,12 @@ bool isItInRange(float value, float lower, float upper) {
         return (value >= lower && value <= upper);
 }
 
-void displayMessage(std::string warning, std::wstring& stream, Language lang) {
-    std::wstring s(warningMessages[warning][lang]);
+void displayMessage(std::map<std::string, std::vector<float>>::iterator warning, std::wstring& stream, Language lang) {
+    if(warning == vitalLimits.end())
+      {
+        --warning;
+      }
+    std::wstring s(warningMessages[warning->first][lang]);
     stream += s;
     std::wcout << stream << std::endl;
 }
@@ -86,12 +90,9 @@ void displayTemperatureWarning(float temperature, std::wstring& stream, Language
               break;
           }
       }
-      if(itr == vitalLimits.end())
-      {
-        --itr;
-      }
+      
       stream = stream + L"Temperature is ";
-      displayMessage(itr->first, stream, lang);
+      displayMessage(itr, stream, lang);
 }
 /// @brief to check if the value is not in range
 bool isNotInRange(float value, float lower, float upper) {
