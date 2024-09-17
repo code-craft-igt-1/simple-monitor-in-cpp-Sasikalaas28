@@ -12,35 +12,42 @@
 #include <string>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
-enum Language {
-    TAMIL,
-    GREEK
-//  DUTCH supported in future
-};
-std::vector<std::wstring> Tamil;
-std::vector<std::wstring> Greek;
-std::map<Language, std::vector<std::wstring>> warningMessages;
-std::map<std::string, int> MessageIndex;
-void initializeWarnigMessages() {
-    Tamil.push_back(L"தாழ்வெப்பநிலை");
-    Tamil.push_back(L"ஹைப்போ அருகில்");
-    Tamil.push_back(L"சாதாரண");
-    Tamil.push_back(L"மிக அருகில்");
-    Tamil.push_back(L"அதிவெப்பநிலை");
-    warningMessages.insert({ Language::TAMIL, Tamil });
-    Greek.push_back(L"υποθερμία");
-    Greek.push_back(L"κοντά σε υπο");
-    Greek.push_back(L"κανονικός");
-    Greek.push_back(L"κοντά σε υπερ");
-    Greek.push_back(L"υπερθερμία");
-    warningMessages.insert({ Language::GREEK, Greek });
-    MessageIndex.insert({ "HYPO_THERMIA", 0 });
-    MessageIndex.insert({ "NEAR_HYPO", 1 });
-    MessageIndex.insert({ "NORMAL", 2 });
-    MessageIndex.insert({ "NEAR_HYPER", 3 });
-    MessageIndex.insert({ "HYPER_THERMIA", 4 });
-}
 
+std::map<std::string, std::vector<float>> vitalLimits = {
+    {"HYPO_THERMIA", {0, 95}},
+    {"NEAR_HYPO", {95, 96.53}},
+    {"NORMAL", {96.54, 100.47}},
+    {"NEAR_HYPER", {100.48, 102}},
+    {"HYPER_THERMIA", {102, 102}}
+};
+std::map<std::string, std::map<Language, std::wstring>> warningMessages;
+void initializeWarnigMessages() {
+    // Set console output to UTF-8
+    system("chcp 65001");
+    // Print the wide string
+    std::wcout.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+
+    std::map<Language, std::wstring> messages;
+    messages.insert({ Language::TAMIL, L"தாழ்வெப்பநிலை"});
+    messages.insert({ Language::GREEK, L"υποθερμία"});
+    warningMessages.insert({"HYPO_THERMIA", messages});
+    messages.clear(); 
+    messages.insert({ Language::TAMIL, L"ஹைப்போ அருகில்"});
+    messages.insert({ Language::GREEK, L"κοντά σε υπο"});
+    warningMessages.insert({"NEAR_HYPO", messages});
+    messages.clear();
+    messages.insert({ Language::TAMIL, L"சாதாரண"});
+    messages.insert({ Language::GREEK, L"κανονικός"});
+    warningMessages.insert({"NORMAL", messages});
+    messages.clear();
+    messages.insert({ Language::TAMIL, L"மிக அருகில்"});
+    messages.insert({ Language::GREEK, L"κοντά σε υπερ"});
+    warningMessages.insert({"NEAR_HYPER", messages});
+    messages.clear();
+    messages.insert({ Language::TAMIL, L"அதிவெப்பநிலை"});
+    messages.insert({ Language::GREEK, L"υπερθερμία"});
+    warningMessages.insert({"HYPER_THERMIA", messages});
+}
 /// @brief displayWarning function to display warning message
 void buffering() {
   for (int i = 0; i < 6; i++) {
@@ -61,31 +68,30 @@ bool isVitalsOk(float temperature, float pulseRate, float spo2) {
 }
 
 bool isItInRange(float value, float lower, float upper) {
-     return (value >= lower && value <= upper);
+    if(value > 102)
+        return false;
+    else
+        return (value >= lower && value <= upper);
 }
 
-void displayMessage(int MsgInd, Language lang) {
-  // Set console output to UTF-8
-  // SetConsoleOutputCP(CP_UTF8);
-    system("chcp 65001");
-    if (MsgInd > 4) {
-        MsgInd = 4;
-    }
-    // Print the wide string
-    std::wcout.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
-    std::wcout << warningMessages[lang][MsgInd] << std::endl;
+void displayMessage(std::string warning, std::wstring& stream, Language lang) {
+    std::wstring s(warningMessages[warning][lang]);
+    stream += s;
+    std::wcout << stream << std::endl;
 }
-void displayTemperatureWarning(float temperature, Language lang) {
-     int MsgInd = 0;
-     std::map<float, float> temperatureRange = { {0, 95}, {95, 96.53},
-                                                {96.54, 100.47}, {100.48, 102}, {102, 102} };
-      for (auto itr = temperatureRange.begin(); itr != temperatureRange.end(); ++itr) {
-          if (isItInRange(temperature, itr->first, itr->second)) {
+void displayTemperatureWarning(float temperature, std::wstring& stream, Language lang) {
+      std::map<std::string, std::vector<float>>::iterator itr;
+      for (itr = vitalLimits.begin(); itr != vitalLimits.end(); ++itr) {
+          if (isItInRange(temperature, itr->second[0], itr->second[1])) {
               break;
           }
-          MsgInd++;
       }
-      displayMessage(MsgInd, lang);
+      if(itr == vitalLimits.end())
+      {
+        --itr;
+      }
+      stream = stream + L"Temperature is ";
+      displayMessage(itr->first, stream, lang);
 }
 /// @brief to check if the value is not in range
 bool isNotInRange(float value, float lower, float upper) {
@@ -105,8 +111,9 @@ bool isTemperatureOk(float temperature) {
   } else {
       isTempOk = true;
   }
-  displayTemperatureWarning(temperature, Language::TAMIL);
-  displayTemperatureWarning(temperature, Language::GREEK);
+  std::wstring stream = L"";
+  displayTemperatureWarning(temperature, stream, Language::TAMIL);
+  displayTemperatureWarning(temperature, stream, Language::GREEK);
   return isTempOk;
 }
 /**

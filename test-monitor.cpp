@@ -85,3 +85,16 @@ TEST(Monitor, TemperatureIsNearHyper) {
 TEST(Monitor, TemperatureIsHyperThermia) {
   ASSERT_FALSE(isVitalsOk(102.1, 90, 100));
 }
+
+TEST(Monitor, TestDisplayMessage) {
+  initializeWarnigMessages();
+  std::wstring stream;
+  displayTemperatureWarning(94, stream, Language::TAMIL);
+  std::wstring tempStr = L"Temperature is தாழ்வெப்பநிலை";
+  ASSERT_EQ(tempStr, stream);
+  stream.clear();
+  tempStr.clear();
+  tempStr = L"Temperature is υποθερμία";
+  displayTemperatureWarning(94, stream, Language::GREEK);
+  ASSERT_EQ(stream, tempStr);
+}
