@@ -31,7 +31,7 @@ void initializeWarnigMessages() {
     messages.insert({ Language::TAMIL, L"தாழ்வெப்பநிலை"});
     messages.insert({ Language::GREEK, L"υποθερμία"});
     warningMessages.insert({"HYPO_THERMIA", messages});
-    messages.clear(); 
+    messages.clear();
     messages.insert({ Language::TAMIL, L"ஹைப்போ அருகில்"});
     messages.insert({ Language::GREEK, L"κοντά σε υπο"});
     warningMessages.insert({"NEAR_HYPO", messages});
@@ -68,30 +68,29 @@ bool isVitalsOk(float temperature, float pulseRate, float spo2) {
 }
 
 bool isItInRange(float value, float lower, float upper) {
-    if(value > 102)
+    if (value > 102)
         return false;
     else
         return (value >= lower && value <= upper);
 }
 
-void displayMessage(std::map<std::string, std::vector<float>>::iterator warning, std::wstring& stream, Language lang) {
-    if(warning == vitalLimits.end())
-      {
+void displayMessage(std::map<std::string, std::vector<float>>::iterator warning,
+ std::wstring* stream, Language lang) {
+    if (warning == vitalLimits.end()) {
         --warning;
       }
     std::wstring s(warningMessages[warning->first][lang]);
-    stream += s;
+    *stream += s;
     std::wcout << stream << std::endl;
 }
-void displayTemperatureWarning(float temperature, std::wstring& stream, Language lang) {
+void displayTemperatureWarning(float temperature, std::wstring* stream, Language lang) {
       std::map<std::string, std::vector<float>>::iterator itr;
       for (itr = vitalLimits.begin(); itr != vitalLimits.end(); ++itr) {
           if (isItInRange(temperature, itr->second[0], itr->second[1])) {
               break;
           }
       }
-      
-      stream = stream + L"Temperature is ";
+      *stream = *stream + L"Temperature is ";
       displayMessage(itr, stream, lang);
 }
 /// @brief to check if the value is not in range
