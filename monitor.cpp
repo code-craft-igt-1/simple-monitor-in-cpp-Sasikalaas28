@@ -112,8 +112,8 @@ bool isTemperatureOk(float temperature) {
       isTempOk = true;
   }
   std::wstring stream = L"";
-  displayTemperatureWarning(temperature, stream, Language::TAMIL);
-  displayTemperatureWarning(temperature, stream, Language::GREEK);
+  displayTemperatureWarning(temperature, &stream, Language::TAMIL);
+  displayTemperatureWarning(temperature, &stream, Language::GREEK);
   return isTempOk;
 }
 /**
